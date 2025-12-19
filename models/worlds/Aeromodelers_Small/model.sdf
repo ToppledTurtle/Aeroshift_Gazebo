@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+    <model name="Aeromodelers_Small">
+      <static>true</static>
+      <pose>-197.45 99.91 -1.82 0 0 0</pose>
+
+      <link name="ground">
+        <collision name="collision">
+          <geometry>
+            <heightmap>
+              <uri>model://Aeromodelers_Small/textures/Aeromodelers_Small_height_map.tif</uri>
+              <size>2164.57 2156.2 9.4</size>
+              <pos>-197.45 99.91  -1.82</pos>
+            </heightmap>
+          </geometry>
+        </collision>
+        <visual name="ground_visual">
+          <geometry>
+            <heightmap>
+              <use_terrain_paging>false</use_terrain_paging>
+              <texture>
+                <diffuse>model://Aeromodelers_Small/textures/Aeromodelers_Small_aerial.png</diffuse>
+                <normal>model://Aeromodelers_Small/textures/Aeromodelers_Small_aerial.png</normal>
+                <size>2164.57 2156.2 9.4</size>
+              </texture>
+              <uri>model://Aeromodelers_Small/textures/Aeromodelers_Small_height_map.tif</uri>
+              <size>2164.57 2156.2 9.4</size>
+              <pos>-197.45 99.91 -1.82</pos>
+              <sampling>2</sampling>
+
+            </heightmap>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+</sdf>

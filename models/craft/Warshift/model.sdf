@@ -1,0 +1,551 @@
+<?xml version="1.0"?>
+<sdf version='1.9'>
+  <model name='Warshift'>
+    <pose>0 0 0.3 0 0 0</pose>  <!-- Adjusted starting height for wheels -->
+    <link name='base_link'>
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>1.4</mass>  <!-- Fuselage main mass -->
+        <inertia>
+          <ixx>0.25</ixx>  <!-- Approximated for ~1.24m x 0.2m x 0.2m box -->
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.3</iyy>
+          <iyz>0</iyz>
+          <izz>0.3</izz>
+        </inertia>
+      </inertial>
+      <collision name='fuselage_collision'>
+        <pose>-0.62 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>1.24 0.2 0.2</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>10</max_vel>
+              <min_depth>0.01</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose>0 0 -0.1 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>  <!-- Adjust scale if needed -->
+            <uri>./meshes/Fuesalage.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.175 0.175 0.175 1.0</ambient>
+          <diffuse>0.175 0.175 0.175 1.0</diffuse>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay />
+      <self_collide>0</self_collide>
+      <sensor name="imu_sensor" type="imu">
+        <!-- Kept as-is -->
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>250</update_rate>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.0003394</stddev>
+                <dynamic_bias_stddev>3.8785e-05</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>1000</dynamic_bias_correlation_time>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.0003394</stddev>
+                <dynamic_bias_stddev>3.8785e-05</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>1000</dynamic_bias_correlation_time>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.0003394</stddev>
+                <dynamic_bias_stddev>3.8785e-05</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>1000</dynamic_bias_correlation_time>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.004</stddev>
+                <dynamic_bias_stddev>0.006</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>300</dynamic_bias_correlation_time>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.004</stddev>
+                <dynamic_bias_stddev>0.006</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>300</dynamic_bias_correlation_time>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.004</stddev>
+                <dynamic_bias_stddev>0.006</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>300</dynamic_bias_correlation_time>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+      <sensor name="navsat_sensor" type="navsat">
+        <!-- Kept as-is -->
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+      </sensor>
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <!-- Kept as-is -->
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure>
+            <noise type="gaussian">
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </pressure>
+        </air_pressure>
+      </sensor>
+      <sensor name="magnetometer_sensor" type="magnetometer">
+        <!-- Kept as-is -->
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>100</update_rate>
+        <magnetometer>
+          <x>
+            <noise type="gaussian">
+              <stddev>0.0001</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <stddev>0.0001</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <stddev>0.0001</stddev>
+            </noise>
+          </z>
+        </magnetometer>
+      </sensor>
+    </link>
+    <link name="airspeed">
+      <!-- Kept as-is -->
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.015</mass>
+        <inertia>
+          <ixx>1e-05</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-05</iyy>
+          <iyz>0</iyz>
+          <izz>1e-05</izz>
+        </inertia>
+      </inertial>
+      <visual name="airspeed_visual">
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1.0</ambient>
+          <diffuse>0 0 0 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+    <joint name='airspeed_joint' type='fixed'>
+      <child>airspeed</child>
+      <parent>base_link</parent>
+    </joint>
+    <link name='rotor_puller'>
+      <!-- Kept propeller, adjusted pose for longer fuselage -->
+      <pose>0.62 0 0 0 1.57079632679 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000166704</iyy>
+          <iyz>0</iyz>
+          <izz>0.000167604</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_puller_collision'>
+        <pose>0 0 0 0 -1.57079632679 0</pose>
+        <geometry>
+          <box>
+            <size>0.005 0.22 0.02</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode />
+          </friction>
+        </surface>
+      </collision>
+      <visual name='rotor_puller_visual'>
+        <pose>0 0 0 0 0 -1.57079632679</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>./meshes/Prop.stl</uri>  <!-- Update if needed -->
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0 0 1 1.0</ambient>
+          <diffuse>0 0 1 1.0</diffuse>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay />
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='rotor_puller_joint' type='revolute'>
+      <child>rotor_puller</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="left_extension">
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.005</ixx>
+          <ixy>0.0</ixy>
+          <iyy>0.01</iyy>
+          <ixz>0.0</ixz>
+          <iyz>0.0</iyz>
+          <izz>0.007</izz>
+        </inertia>
+      </inertial>
+      <collision name="left_extension_collision">
+        <pose>0.127 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.254 0.3 0.02</size>  <!-- Extension length -->
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>10</max_vel>
+              <min_depth>0.01</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="left_extension_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>./meshes/Left_Wing.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.175 0.175 0.175 1.0</ambient>
+          <diffuse>0.175 0.175 0.175 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+    <joint name="left_telescope" type="prismatic">
+      <parent>base_link</parent>
+      <child>left_extension</child>
+      <pose>0.61 0 0 0 0 0</pose>  <!-- At end of inner wing -->
+      <axis>
+        <xyz>1 0 0</xyz>  <!-- Slide along local x (swept direction) -->
+        <limit>
+          <lower>0</lower>
+          <upper>0.254</upper>
+        </limit>
+        <dynamics>
+          <damping>0.5</damping>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
+    </joint>
+    <link name="right_extension">
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.005</ixx>
+          <ixy>0.0</ixy>
+          <iyy>0.01</iyy>
+          <ixz>0.0</ixz>
+          <iyz>0.0</iyz>
+          <izz>0.007</izz>
+        </inertia>
+      </inertial>
+      <collision name="right_extension_collision">
+        <pose>0.127 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.254 0.3 0.02</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <max_vel>10</max_vel>
+              <min_depth>0.01</min_depth>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="right_extension_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>./meshes/Right_Wing.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.175 0.175 0.175 1.0</ambient>
+          <diffuse>0.175 0.175 0.175 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+    <joint name="right_telescope" type="prismatic">
+      <parent>base_link</parent>
+      <child>right_extension</child>
+      <pose>0.61 0 0 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.254</upper>
+        </limit>
+        <dynamics>
+          <damping>0.5</damping>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
+    </joint>
+    <link name="vtail">
+      <inertial>
+        <mass>0.05</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <ixy>0.0</ixy>
+          <iyy>0.0001</iyy>
+          <ixz>0.0</ixz>
+          <iyz>0.0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <visual name='vtail_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>./meshes/Tail.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0 0 1 1.0</ambient>
+          <diffuse>0 0 1 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+    <!-- Wing aero plugins (adjusted cp, area; no control joints assumed) -->
+    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0.05984281113</a0>
+      <cla>4.752798721</cla>
+      <cda>1.5</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-0.05 0.45 0.05</cp>
+      <area>0.3</area>  <!-- Per side, base -->
+      <air_density>1.2041</air_density>
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>base_link</link_name>
+    </plugin>
+    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0.05984281113</a0>
+      <cla>4.752798721</cla>
+      <cda>1.5</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-0.05 -0.45 0.05</cp>
+      <area>0.3</area>
+      <air_density>1.2041</air_density>
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>base_link</link_name>
+    </plugin>
+    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0.05984281113</a0>
+      <cla>4.752798721</cla>
+      <cda>1.5</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-0.05 0.7 0.05</cp>  <!-- Extended position approx -->
+      <area>0.15</area>  <!-- Extension area -->
+      <air_density>1.2041</air_density>
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>left_extension</link_name>
+    </plugin>
+    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>0.05984281113</a0>
+      <cla>4.752798721</cla>
+      <cda>1.5</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-0.05 -0.7 0.05</cp>
+      <area>0.15</area>
+      <air_density>1.2041</air_density>
+      <forward>1 0 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>right_extension</link_name>
+    </plugin>
+    <!-- V-tail aero (tilted upward for yaw component; tune dihedral) -->
+    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>-0.2</a0>
+      <cla>4.752798721</cla>
+      <cda>0.6417112299</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-1.0 0.1 0.2</cp>
+      <area>0.1</area>  <!-- Small tail area -->
+      <air_density>1.2041</air_density>
+      <forward>1 0 0</forward>
+      <upward>0 0.707 0.707</upward>  <!-- Tilted for 45deg dihedral -->
+      <link_name>left_vtail</link_name>
+      <control_joint_name>left_v_joint</control_joint_name>
+      <control_joint_rad_to_cl>-4.0</control_joint_rad_to_cl>
+    </plugin>
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>left_v_joint</joint_name>
+      <sub_topic>servo_left_v</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+    <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag">
+      <a0>-0.2</a0>
+      <cla>4.752798721</cla>
+      <cda>0.6417112299</cda>
+      <cma>0.0</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-1.0 -0.1 0.2</cp>
+      <area>0.1</area>
+      <air_density>1.2041</air_density>
+      <forward>1 0 0</forward>
+      <upward>0 -0.707 0.707</upward>  <!-- Opposite tilt for right -->
+      <link_name>right_vtail</link_name>
+      <control_joint_name>right_v_joint</control_joint_name>
+      <control_joint_rad_to_cl>-4.0</control_joint_rad_to_cl>
+    </plugin>
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>right_v_joint</joint_name>
+      <sub_topic>servo_right_v</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+    <!-- Wing extension controllers -->
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>left_telescope</joint_name>
+      <sub_topic>left_wing_extend</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>right_telescope</joint_name>
+      <sub_topic>right_wing_extend</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+    <plugin filename="gz-sim-multicopter-motor-model-system"
+      name="gz::sim::systems::MulticopterMotorModel">
+      <!-- Kept propeller model; adjust constants if needed -->
+      <jointName>rotor_puller_joint</jointName>
+      <linkName>rotor_puller</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000</maxRotVelocity>
+      <motorConstant>1.2e-05</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>0</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+    <static>0</static>
+  </model>
+</sdf>
